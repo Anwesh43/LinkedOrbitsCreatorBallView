@@ -44,7 +44,9 @@ fun Canvas.drawOrbitCreatorBall(scale : Float, w : Float, paint : Paint) {
         val sfi1 : Float = sfi.divideScale(0, 2)
         val sfi2 : Float = sfi.divideScale(1, 2)
         si1 = sfi1
-        si2 += sfi2
+        if (j != circles - 1) {
+            si2 += sfi2
+        }
         paint.style = Paint.Style.STROKE
         drawArc(RectF(-r, -r, r, r), 0f, 360f * sfi1, false, paint)
     }
@@ -80,5 +82,25 @@ class OrbitsCreatorBallView(ctx : Context) : View(ctx) {
             }
         }
         return true
+    }
+
+    data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
+
+        fun update(cb : (Float) -> Unit) {
+            scale += scGap * dir
+            if (Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                dir = 0f
+                prevScale = scale
+                cb(prevScale)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            if (dir == 0f) {
+                dir = 1f - 2 * prevScale
+                cb()
+            }
+        }
     }
 }
