@@ -219,4 +219,13 @@ class OrbitsCreatorBallView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : OrbitsCreatorBallView {
+            val view : OrbitsCreatorBallView = OrbitsCreatorBallView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
