@@ -21,6 +21,7 @@ val ballRFactor : Float = 0.1f
 val delay : Long = 20
 val circles : Int = 3
 val scGap : Float = 0.02f / circles
+val backColor : Int = Color.parseColor("#BDBDBD")
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -34,7 +35,7 @@ fun Canvas.drawOrbitCreatorBall(scale : Float, w : Float, paint : Paint) {
     val gap : Float = (start - end) / circles
     var si1 : Float = 0f
     var si2 : Float = 0f
-    val ballR : Float = w / ballRFactor
+    val ballR : Float = w * ballRFactor
     for (j in 0..(circles - 1)) {
         val r  : Float = start + j * gap
         val sfi : Float = sf.divideScale(j, circles)
@@ -193,6 +194,29 @@ class OrbitsCreatorBallView(ctx : Context) : View(ctx) {
 
         fun startUpdating(cb : () -> Unit) {
             curr.startUpdating(cb)
+        }
+    }
+
+    data class Renderer(var view : OrbitsCreatorBallView) {
+
+        private val animator : Animator = Animator(view)
+        private val ocb : OrbitsCreatorBall = OrbitsCreatorBall(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            ocb.draw(canvas, paint)
+            animator.animate {
+                ocb.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            ocb.startUpdating {
+                animator.start()
+            }
         }
     }
 }
