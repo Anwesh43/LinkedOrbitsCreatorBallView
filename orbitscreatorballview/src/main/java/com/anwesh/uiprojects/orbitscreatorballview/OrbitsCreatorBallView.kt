@@ -66,3 +66,19 @@ fun Canvas.drawOCBNode(i : Int, scale : Float, paint : Paint) {
     drawOrbitCreatorBall(scale, w, paint)
     restore()
 }
+
+class OrbitsCreatorBallView(ctx : Context) : View(ctx) {
+
+    override fun onDraw(canvas : Canvas) {
+
+    }
+
+    override fun onTouchEvent(event : MotionEvent) : Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+
+            }
+        }
+        return true
+    }
+}
